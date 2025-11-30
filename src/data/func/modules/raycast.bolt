@@ -1,0 +1,17 @@
+function func:raycast/cast:
+    summon area_effect_cloud ~ ~ ~ {Duration:1, Tags:["ray"]}
+    execute anchored eyes rotated as @s run tp @e[tag=ray,limit=1,sort=nearest] ^ ^ ^ ~ ~
+    execute as @e[tag=ray,limit=1,sort=nearest] run function func:raycast/process
+
+function func:raycast/process:
+    scoreboard players set @s steps 10
+    execute at @s run function func:raycast/move
+    kill @s
+
+function func:raycast/move:
+    tp @s ^ ^ ^.5
+    execute if block ~ ~ ~ dropper:
+        tag @s add hit
+        execute align xyz positioned ~.5 ~ ~.5 run function func:components/arm/spawn
+    scoreboard players remove @s steps 1
+    execute as @s[tag=!hit,scores={steps=1..}] at @s run function func:raycast/move

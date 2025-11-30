@@ -1,2 +1,11 @@
 function func:update:
-    say onUpdate
+    # place dropper
+    execute as @p[scores={placedDropper=1..}] at @s:
+        function func:raycast/cast
+        scoreboard players reset @s placedDropper
+    
+    # components - arms
+    execute as @e[name=arm] at @s run function func:components/arm/update
+
+    # items
+    execute as @e[tag=item] at @s run function func:item/update

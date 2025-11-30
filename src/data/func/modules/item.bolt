@@ -1,0 +1,9 @@
+function func:item/update:
+    execute if block ~ ~ ~ piston[facing=north]:
+        tp @s ~ ~ ~-.1 180 0
+    execute if block ~ ~ ~ piston[facing=south]:
+        tp @s ~ ~ ~0.1 0 0
+    execute if block ~ ~ ~ piston[facing=east]:
+        tp @s ~0.1 ~ ~ 270 0
+    execute if block ~ ~ ~ piston[facing=west]:
+        tp @s ~-.1 ~ ~ 90 0

@@ -13,7 +13,10 @@
     "meta": {
         "bolt": {
             "entrypoint": [
-                "func:main"
+                "func:main",
+                "func:raycast",
+                "func:components",
+                "func:item"
             ]
         }
     }
