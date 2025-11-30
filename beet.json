@@ -15,8 +15,8 @@
             "entrypoint": [
                 "func:main",
                 "func:raycast",
-                "func:components",
-                "func:item"
+                "func:item",
+                "func:logistics"
             ]
         }
     }

@@ -1,0 +1,22 @@
+function func:logistics/inserter/spawn:
+    summon armor_stand ~ ~ ~ {Marker:1,Invisible:1,NoGravity:1,Tags:["inserter"]}
+
+    raw tellraw @a {"text":"> placed inserter","color":"gold"}
+
+    if block ~ ~ ~ lightning_rod[facing=north]:
+        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 0 0
+    if block ~ ~ ~ lightning_rod[facing=south]:
+        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 180 0
+    if block ~ ~ ~ lightning_rod[facing=east]:
+        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 90 0
+    if block ~ ~ ~ lightning_rod[facing=west]:
+        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 270 0
+
+function func:logistics/inserter/update:
+    positioned ^ ^.5 ^-.4 if entity @e[tag=item,distance=...5] if score @s timer matches 20..:
+        tp @e[tag=item,limit=1,sort=nearest] ^ ^-.2 ^1
+        scoreboard players set @s timer 0
+    
+    unless score @s timer matches 20.. run scoreboard players add @s timer 1
+
+    # positioned ^ ^.5 ^-.4 run particle flame
