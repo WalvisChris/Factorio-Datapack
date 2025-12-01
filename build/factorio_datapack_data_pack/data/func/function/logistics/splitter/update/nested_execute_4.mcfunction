@@ -1,3 +1,3 @@
 scoreboard players set @s splitter 0
-tag @e[tag=item, tag=!move, distance=..0.5, limit=1, sort=nearest] add moved
+tag @e[tag=item, tag=!move, distance=..0.5, limit=1, sort=nearest] add move
 tp @e[tag=move, limit=1, sort=nearest] ^1 ^ ^1

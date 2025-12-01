@@ -5,6 +5,7 @@ function func:item/update:
     function func:item/move
 
 function func:item/move:
+    function func:item/set_xz
     if block ~ ~ ~ #trapdoors[facing=north]:
         positioned ~ ~ ~0.1 unless entity @e[tag=item,distance=...05] run tp @s ~ ~ ~ 180 0
     if block ~ ~  ~ #trapdoors[facing=south]:
@@ -13,8 +14,23 @@ function func:item/move:
         positioned ~-.1 ~ ~ unless entity @e[tag=item,distance=...05] run tp @s ~ ~ ~ 270 0
     if block ~ ~  ~ #trapdoors[facing=west]:
         positioned ~0.1 ~ ~ unless entity @e[tag=item,distance=...05] run tp @s ~ ~ ~ 90 0
-    function func:item/set_xz
+    function func:item/align
  
 function func:item/set_xz:
     execute store result score @s x run data get entity @s Pos[0] 100
     execute store result score @s z run data get entity @s Pos[2] 100
+
+function func:item/align:
+    if entity @s[y_rotation=0] run say 0 0
+    if entity @s[y_rotation=180] run say 180 0
+
+    if entity @s[y_rotation=90] run say 90 0
+    if entity @s[y_rotation=270] run say 270 0
+
+function func:item/align_x:
+    pass
+    #if score @s x matches 0..24 run data modify entity @s Pos[0] set value 0.25
+
+function func:item/align_z:
+    pass
+    #if score @s z matches 0..24 run data modify entity @s Pos[2] set value 0.25
