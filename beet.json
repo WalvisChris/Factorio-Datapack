@@ -15,7 +15,7 @@
             "entrypoint": [
                 "func:main",
                 "func:item",
-                "func:raytrace",
+                "func:raycast",
                 "func:logistics"
             ]
         }
