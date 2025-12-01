@@ -4,14 +4,17 @@ function func:raycast/cast:
     execute as @e[tag=ray,limit=1,sort=nearest] run function func:raycast/process
 
 function func:raycast/process:
-    scoreboard players set @s steps 10
+    scoreboard players set @s steps 50
     execute at @s run function func:raycast/move
     kill @s
 
 function func:raycast/move:
-    tp @s ^ ^ ^.5
-    execute if block ~ ~ ~ lightning_rod:
+    tp @s ^ ^ ^.2
+
+    execute if block ~ ~ ~ white_bed:
         tag @s add hit
-        execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/inserter/spawn
+        execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/splitter/spawn
+    
+    # iterate
     scoreboard players remove @s steps 1
     execute as @s[tag=!hit,scores={steps=1..}] at @s run function func:raycast/move

@@ -1,22 +1,46 @@
-function func:logistics/inserter/spawn:
-    summon armor_stand ~ ~ ~ {Marker:1,Invisible:1,NoGravity:1,Tags:["inserter"]}
+function func:logistics/splitter/spawn:
+    summon armor_stand ~ ~ ~ {Invisible:0,NoGravity:1,Tags:["splitter"]}
+    raw tellraw @a {"text":"> placed splitter","color":"gold"}
+    execute as @e[tag=splitter,limit=1,sort=nearest] at @s run function func:logistics/splitter/align
 
-    raw tellraw @a {"text":"> placed inserter","color":"gold"}
+function func:logistics/splitter/align:
+    scoreboard players set @s splitter 0
+    scoreboard players set @s timer 20
+    if block ~ ~ ~ #beds[facing=north] run tp @s ~ ~ ~-.5 270 0
+    if block ~ ~ ~ #beds[facing=south] run tp @s ~ ~ ~0.5 90 0
+    if block ~ ~ ~ #beds[facing=east] run tp @s ~0.5 ~ ~ 0 0
+    if block ~ ~ ~ #beds[facing=west] run tp @s ~-.5 ~ ~ 180 0
 
-    if block ~ ~ ~ lightning_rod[facing=north]:
-        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 0 0
-    if block ~ ~ ~ lightning_rod[facing=south]:
-        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 180 0
-    if block ~ ~ ~ lightning_rod[facing=east]:
-        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 90 0
-    if block ~ ~ ~ lightning_rod[facing=west]:
-        tp @e[tag=inserter,limit=1,sort=nearest] ~ ~ ~ 270 0
+function func:logistics/splitter/update:
+    # right
+    execute positioned ^-.5 ^ ^-.5 if entity @e[tag=item,tag=!move,distance=...5]:
+        if score @s splitter matches 0 unless entity @e[tag=move]:
+            
+            scoreboard players set @s splitter 1
+            tag @e[tag=item,tag=!move,distance=...5,limit=1,sort=nearest] add move
+            tp @e[tag=move,limit=1,sort=nearest] ^ ^ ^1
 
-function func:logistics/inserter/update:
-    positioned ^ ^.5 ^-.4 if entity @e[tag=item,distance=...5] if score @s timer matches 20..:
-        tp @e[tag=item,limit=1,sort=nearest] ^ ^-.2 ^1
-        scoreboard players set @s timer 0
-    
-    unless score @s timer matches 20.. run scoreboard players add @s timer 1
+        if score @s splitter matches 1 unless entity @e[tag=move]:
 
-    # positioned ^ ^.5 ^-.4 run particle flame
+            scoreboard players set @s splitter 0
+            tag @e[tag=item,tag=!move,distance=...5,limit=1,sort=nearest] add move
+            tp @e[tag=move,limit=1,sort=nearest] ^1 ^ ^1
+            
+    # left
+    execute positioned ^0.5 ^ ^-.5 if entity @e[tag=item,tag=!move,distance=...5]:
+        if score @s splitter matches 0 unless entity @e[tag=move]:
+
+            scoreboard players set @s splitter 1
+            tag @e[tag=item,tag=!move,distance=...5,limit=1,sort=nearest] add move
+            tp @e[tag=move,limit=1,sort=nearest] ^ ^ ^1
+                    
+        if score @s splitter matches 1 unless entity @e[tag=move]:
+
+            scoreboard players set @s splitter 0
+            tag @e[tag=item,tag=!move,distance=...5,limit=1,sort=nearest] add moved
+            tp @e[tag=move,limit=1,sort=nearest] ^1 ^ ^1
+            
+    # reset tag
+    execute as @e[tag=move] at @s unless entity @e[tag=splitter,distance=...5] run tag @s remove move
+
+    # timer

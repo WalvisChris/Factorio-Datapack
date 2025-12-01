@@ -1,1 +1,1 @@
-summon armor_stand ~ ~-0.7 ~ {Invisible: 1, Small: 1, NoGravity: 1, ArmorItems: [{}, {}, {}, {id: "minecraft:iron_ingot", count: 1b}], Tags: ["item"]}
+summon armor_stand ~ ~ ~ {Marker: 1, Invisible: 0, Small: 1, NoGravity: 1, Tags: ["item"], ArmorItems: [{}, {}, {}, {id: "minecraft:iron_ingot"}]}

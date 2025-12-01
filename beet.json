@@ -14,8 +14,8 @@
         "bolt": {
             "entrypoint": [
                 "func:main",
-                "func:raycast",
                 "func:item",
+                "func:raytrace",
                 "func:logistics"
             ]
         }
