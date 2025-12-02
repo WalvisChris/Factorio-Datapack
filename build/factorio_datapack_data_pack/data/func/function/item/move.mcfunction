@@ -1,6 +1,5 @@
-function func:item/set_xz
-execute if block ~ ~ ~ #trapdoors[facing=north] positioned ~ ~ ~0.1 unless entity @e[tag=item, distance=..0.05] run tp @s ~ ~ ~ 180 0
-execute if block ~ ~ ~ #trapdoors[facing=south] positioned ~ ~ ~-0.1 unless entity @e[tag=item, distance=..0.05] run tp @s ~ ~ ~ 0 0
-execute if block ~ ~ ~ #trapdoors[facing=east] positioned ~-0.1 ~ ~ unless entity @e[tag=item, distance=..0.05] run tp @s ~ ~ ~ 270 0
-execute if block ~ ~ ~ #trapdoors[facing=west] positioned ~0.1 ~ ~ unless entity @e[tag=item, distance=..0.05] run tp @s ~ ~ ~ 90 0
-function func:item/align
+function func:item/store_xz
+execute if block ~ ~ ~ acacia_trapdoor run function func:item/move/nested_execute_4
+execute if block ~ ~ ~ birch_trapdoor run function func:item/move/nested_execute_5
+execute if block ~ ~ ~ jungle_trapdoor run function func:item/move/nested_execute_6
+particle flame

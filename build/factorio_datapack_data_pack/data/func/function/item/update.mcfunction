@@ -1,1 +1,1 @@
-function func:item/move
+execute if block ~ ~ ~ #trapdoors at @s run function func:item/move
