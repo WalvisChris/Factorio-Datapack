@@ -1,2 +1,3 @@
-data modify entity @s Rotation[0] set value 270.0f
-execute at @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^0.1
+execute if score @s x matches ..24 run function func:item/align/left_west/nested_execute_0
+execute if score @s x matches 25..50 run function func:item/align/left_west/nested_execute_1
+execute if score @s x matches 51.. run function func:item/align/left_west/nested_execute_2

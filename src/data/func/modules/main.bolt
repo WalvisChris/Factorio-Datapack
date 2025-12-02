@@ -1,3 +1,12 @@
 function func:update:
     # items
     execute as @e[tag=item] at @s run function func:item/update
+    execute as @e[tag=moved] at @s unless entity @e[tag=splitter,distance=...5] run tag @s remove moved
+
+    # raycast
+    execute as @e[scores={placedSplitter=1..}] at @s:
+        function func:raycast/cast
+        scoreboard players reset @s placedSplitter
+
+    # splitter
+    execute as @e[tag=splitter] at @s run function func:logistics/splitter/update

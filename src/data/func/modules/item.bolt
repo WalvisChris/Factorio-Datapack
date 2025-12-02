@@ -11,12 +11,12 @@ function func:item/store_xz:
     scoreboard players operation @s z %= mod x
 
 function func:item/align/x_straight:
-    if score @s x matches ..49 at @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
-    if score @s x matches 50.. at @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
+    if score @s x matches ..49 at @s align x positioned ~0.25 ~ ~ run function func:item/step
+    if score @s x matches 50.. at @s align x positioned ~0.75 ~ ~ run function func:item/step
 
 function func:item/align/z_straight:
-    if score @s z matches ..49 at @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
-    if score @s z matches 50.. at @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
+    if score @s z matches ..49 at @s align z positioned ~ ~ ~0.25 run function func:item/step
+    if score @s z matches 50.. at @s align z positioned ~ ~ ~0.75 run function func:item/step
 
 function func:item/align/left_north:
     # short lane
@@ -24,21 +24,25 @@ function func:item/align/left_north:
         # in
         if score @s z matches ..24:
             data modify entity @s Rotation[0] set value 0.0f # right
-            as @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
-        # out
+            as @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out short
         if score @s z matches 25..50:
             data modify entity @s Rotation[0] set value 270.0f # up
-            as @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out long
+        if score @s z matches 51..:
+            data modify entity @s Rotation[0] set value 270.0f # up
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
     # long lane
     if score @s x matches ..49:
         # in
         if score @s z matches ..74:
             data modify entity @s Rotation[0] set value 0.0f # right
-            as @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
-    # top
-    if score @s z matches 75..:
-        data modify entity @s Rotation[0] set value 270.0f # up
-        as @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
+        # out
+        if score @s z matches 75..:
+            data modify entity @s Rotation[0] set value 270.0f # up
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
 
 function func:item/align/left_south:
     # short lane
@@ -46,21 +50,25 @@ function func:item/align/left_south:
         # in
         if score @s z matches 76..:
             data modify entity @s Rotation[0] set value 180.0f # left
-            as @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
-        # out
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
+        # out short
         if score @s z matches 50..75:
             data modify entity @s Rotation[0] set value 90.0f # down
-            as @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
+        # out long
+        if score @s z matches ..49:
+            data modify entity @s Rotation[0] set value 90.0f # down
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
     # long lane
     if score @s x matches 50..:
         # in
         if score @s z matches 26..:
             data modify entity @s Rotation[0] set value 180.0f # left
-            as @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
-    # top
-    if score @s z matches ..25:
-        data modify entity @s Rotation[0] set value 90.0f # down
-        as @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
+            as @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out
+        if score @s z matches ..25:
+            data modify entity @s Rotation[0] set value 90.0f # down
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
 
 function func:item/align/left_east:
     # short lane
@@ -68,136 +76,155 @@ function func:item/align/left_east:
         # in
         if score @s x matches 76..:
             data modify entity @s Rotation[0] set value 90.0f # down
-            as @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
-        # out
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
+        # out short
         if score @s x matches 50..75:
             data modify entity @s Rotation[0] set value 0.0f # right
-            as @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
+            as @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out long
+        if score @s x matches ..49:
+            data modify entity @s Rotation[0] set value 0.0f # right
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
     # long lane
     if score @s z matches ..49:
         # in
         if score @s x matches 26..:
             data modify entity @s Rotation[0] set value 90.0f # down
-            as @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
-    # top
-    if score @s x matches ..25:
-        data modify entity @s Rotation[0] set value 0.0f # right
-        as @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out
+        if score @s x matches ..25:
+            data modify entity @s Rotation[0] set value 0.0f # right
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
 
 function func:item/align/left_west:
-    # DEZE WERKT HELEMAAL
     # short lane
     if score @s z matches ..49:
         # in
         if score @s x matches ..24:
             data modify entity @s Rotation[0] set value 270.0f # up
-            at @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
-        # out
+            at @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out short
         if score @s x matches 25..50:
             data modify entity @s Rotation[0] set value 180.0f # left
-            at @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
+            at @s align x positioned ~0.25 ~ ~ run function func:item/step
+        # out long
+        if score @s x matches 51..:
+            data modify entity @s Rotation[0] set value 180.0f # left
+            at @s align x positioned ~0.75 ~ ~ run function func:item/step
     # long lane
     if score @s z matches 50..:
         # in
         if score @s x matches ..74:
             data modify entity @s Rotation[0] set value 270.0f # up
-            at @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
-    # top
-    if score @s x matches 75..:
-        data modify entity @s Rotation[0] set value 180.0f # left
-        at @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
+            at @s align z positioned ~ ~ ~0.75 run function func:item/step
+        # out
+        if score @s x matches 75..:
+            data modify entity @s Rotation[0] set value 180.0f # left
+            at @s align x positioned ~0.75 ~ ~ run function func:item/step
 
 function func:item/align/right_north:
-    # DEZE WERKT HELEMAAL
-    # long lane
-    if score @s x matches 50..:
-        # in
-        if score @s z matches ..74:
-            data modify entity @s Rotation[0] set value 0.0f # right
-            at @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
     # short lane
     if score @s x matches ..49:
         # in
         if score @s z matches ..24:
             data modify entity @s Rotation[0] set value 0.0f # right
-            at @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
-        # out
+            at @s align x positioned ~0.25 ~ ~ run function func:item/step
+        # out short
         if score @s z matches 25..50:
             data modify entity @s Rotation[0] set value 90.0f # down
-            at @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
-    # top
-    if score @s z matches 75..:
-        data modify entity @s Rotation[0] set value 90.0f # down
-        at @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
+            at @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out long
+        if score @s z matches 51..:
+            data modify entity @s Rotation[0] set value 90.0f # down
+            at @s align z positioned ~ ~ ~0.75 run function func:item/step
+    # long lane
+    if score @s x matches 50..:
+        # in
+        if score @s z matches ..74:
+            data modify entity @s Rotation[0] set value 0.0f # right
+            at @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out
+        if score @s z matches 75..:
+            data modify entity @s Rotation[0] set value 90.0f # down
+            at @s align z positioned ~ ~ ~0.75 run function func:item/step
 
 function func:item/align/right_south:
-    # DEZE WERKT HELEMAAL
     # short lane
     if score @s x matches 50..:
         # in
         if score @s z matches 76..:
             data modify entity @s Rotation[0] set value 180.0f # left
-            as @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
-        # out
+            as @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out short
         if score @s z matches 50..75:
             data modify entity @s Rotation[0] set value 270.0f # up
-            as @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
+        # out long
+        if score @s z matches ..49:
+            data modify entity @s Rotation[0] set value 270.0f # up
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
     # long lane
     if score @s x matches ..49:
         # in
         if score @s z matches 26..:
             data modify entity @s Rotation[0] set value 180.0f # left
-            as @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
-    # top
-    if score @s z matches ..25:
-        data modify entity @s Rotation[0] set value 270.0f # up
-        as @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
+        # out
+        if score @s z matches ..25:
+            data modify entity @s Rotation[0] set value 270.0f # up
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
 
 function func:item/align/right_east:
-    # DEZE WERKT HELEMAAL
     # short lane
     if score @s z matches ..49:
         # in
         if score @s x matches 76..:
             data modify entity @s Rotation[0] set value 90.0f # down
-            as @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
-        # out
+            as @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out short
         if score @s x matches 50..75:
             data modify entity @s Rotation[0] set value 180.0f # left
-            as @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
+            as @s align x positioned ~0.75 ~ ~ run function func:item/step
+        # out long
+        if score @s x matches ..49:
+            data modify entity @s Rotation[0] set value 180.0f # left
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
     # long lane
     if score @s z matches 50..:
         # in
         if score @s x matches 26..:
             data modify entity @s Rotation[0] set value 90.0f # down
-            as @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1
-    # top
-    if score @s x matches ..25:
-        data modify entity @s Rotation[0] set value 180.0f # left
-        as @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1
+            as @s align z positioned ~ ~ ~0.75 run function func:item/step
+        # out
+        if score @s x matches ..25:
+            data modify entity @s Rotation[0] set value 180.0f # left
+            as @s align x positioned ~0.25 ~ ~ run function func:item/step
 
 function func:item/align/right_west:
-    # DEZE WERKT HELEMAAL
-    # long lane
-    if score @s z matches ..49:
-        # in
-        if score @s x matches ..74:
-            data modify entity @s Rotation[0] set value 270.0f # up
-            at @s align z positioned ~ ~ ~0.25 run tp @s ^ ^ ^.1
     # short lane
     if score @s z matches 50..:
         # in
         if score @s x matches ..24:
             data modify entity @s Rotation[0] set value 270.0f # up
-            at @s align z positioned ~ ~ ~0.75 run tp @s ^ ^ ^.1 
-        # out
+            at @s align z positioned ~ ~ ~0.75 run function func:item/step 
+        # out short
         if score @s x matches 24..50:
             data modify entity @s Rotation[0] set value 0.0f # right
-            at @s align x positioned ~0.25 ~ ~ run tp @s ^ ^ ^.1 
-    # top
-    if score @s x matches 75..:
+            at @s align x positioned ~0.25 ~ ~ run function func:item/step 
+        # out long
+        if score @s x matches 51..:
             data modify entity @s Rotation[0] set value 0.0f # right
-            at @s align x positioned ~0.75 ~ ~ run tp @s ^ ^ ^.1
+            at @s align x positioned ~0.75 ~ ~ run function func:item/step 
+    # long lane
+    if score @s z matches ..49:
+        # in
+        if score @s x matches ..74:
+            data modify entity @s Rotation[0] set value 270.0f # up
+            at @s align z positioned ~ ~ ~0.25 run function func:item/step
+        # out
+        if score @s x matches 75..:
+                data modify entity @s Rotation[0] set value 0.0f # right
+                at @s align x positioned ~0.75 ~ ~ run function func:item/step
 
 function func:item/move:
     
@@ -243,3 +270,6 @@ function func:item/move:
     # DEBUG
     particle flame
     #raw tellraw @a ["",{"text":"("},{"score":{"name":"@s","objective":"x"}},{"text":", "},{"score":{"name":"@s","objective":"z"}},{"text":")"}]
+
+function func:item/step:
+    positioned ^ ^ ^0.1 unless entity @e[tag=item,distance=...05] run tp @s ^ ^ ^0.001

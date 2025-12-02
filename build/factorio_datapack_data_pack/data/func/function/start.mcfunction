@@ -1,6 +1,10 @@
 scoreboard objectives add x dummy
 scoreboard objectives add z dummy
-scoreboard objectives setdisplay sidebar z
+scoreboard objectives add steps dummy
+scoreboard objectives add splitter dummy
+scoreboard objectives add placedSplitter minecraft.used:minecraft.white_bed
+scoreboard objectives setdisplay sidebar splitter
+scoreboard players reset @a placedSplitter
 scoreboard players set mod x 100
 clear @p
 give @p acacia_trapdoor[minecraft:custom_name='{"text":"Belt","italic":false}']
@@ -9,4 +13,7 @@ give @p jungle_trapdoor[minecraft:custom_name='{"text":"Belt Corner Right","ital
 give @p white_bed[minecraft:custom_name='{"text":"Splitter","italic":false}']
 give @p lightning_rod[minecraft:custom_name='{"text":"Inserter","italic":false}']
 kill @e[tag=item]
+execute at @e[tag=splitter] run setblock ~ ~ ~ air
+kill @e[tag=splitter]
+kill @e[type=item]
 say onLoad

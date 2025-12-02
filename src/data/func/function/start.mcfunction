@@ -1,9 +1,14 @@
 # scoreboard
 scoreboard objectives add x dummy
 scoreboard objectives add z dummy
+scoreboard objectives add steps dummy
+scoreboard objectives add splitter dummy
 
-scoreboard objectives setdisplay sidebar z
+scoreboard objectives add placedSplitter minecraft.used:minecraft.white_bed
 
+scoreboard objectives setdisplay sidebar splitter
+
+scoreboard players reset @a placedSplitter
 scoreboard players set mod x 100
 
 # give
@@ -16,5 +21,10 @@ give @p lightning_rod[minecraft:custom_name='{"text":"Inserter","italic":false}'
 
 # kill
 kill @e[tag=item]
+execute at @e[tag=splitter] run setblock ~ ~ ~ air
+kill @e[tag=splitter]
 
+kill @e[type=item]
+
+# end
 say onLoad

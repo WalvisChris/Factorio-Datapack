@@ -1,0 +1,41 @@
+function func:logistics/splitter/spawn:
+    summon armor_stand ~ ~ ~ {Marker:1,Invisible:1,NoGravity:1,Tags:["splitter"]}
+    raw tellraw @a {"text":"> placed splitter","color":"gold"}
+    execute as @e[tag=splitter,limit=1,sort=nearest] at @s:
+        scoreboard players set @s splitter 0
+        function func:logistics/splitter/align
+
+function func:logistics/splitter/align:
+    if block ~ ~ ~ #beds[facing=north] run tp @s ~ ~ ~-.5 270 0
+    if block ~ ~ ~ #beds[facing=south] run tp @s ~ ~ ~0.5 90 0
+    if block ~ ~ ~ #beds[facing=east] run tp @s ~0.5 ~ ~ 0 0
+    if block ~ ~ ~ #beds[facing=west] run tp @s ~-.5 ~ ~ 180 0
+
+function func:logistics/splitter/update:
+    # right
+    execute positioned ^-.5 ^ ^-.2 if entity @e[tag=item,tag=!busy,distance=...5]:
+        execute as @e[tag=item,tag=!busy,distance=...5] at @s:
+            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 0 unless entity @s[tag=busy]:
+                positioned ^ ^ ^1.1 unless entity @e[tag=item,distance=...1]:
+                    tag @s add busy
+                    tp @s ^ ^ ^
+                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
+            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
+                positioned ^1 ^ ^1.1 unless entity @e[tag=item,distance=...1]:
+                    tag @s add busy
+                    tp @s ^ ^ ^
+                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
+    
+    # left
+    execute positioned ^0.5 ^ ^-.2 if entity @e[tag=item,tag=!busy,distance=...5]:
+        execute as @e[tag=item,tag=!busy,distance=...5] at @s:
+            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 0 unless entity @s[tag=busy]:
+                positioned ^-1 ^ ^1.1 unless entity @e[tag=item,distance=...1]:
+                    tag @s add busy
+                    tp @s ^ ^ ^
+                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
+            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
+                positioned ^ ^ ^1.1 unless entity @e[tag=item,distance=...1]:
+                    tag @s add busy
+                    tp @s ^ ^ ^
+                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
