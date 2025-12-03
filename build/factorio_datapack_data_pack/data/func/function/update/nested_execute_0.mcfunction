@@ -1,2 +1,2 @@
-say -1
-scoreboard players remove @s cooldown 1
+function func:raycast/cast
+scoreboard players reset @s placedSplitter

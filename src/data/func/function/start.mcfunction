@@ -6,10 +6,12 @@ scoreboard objectives add splitter dummy
 scoreboard objectives add cooldown dummy
 
 scoreboard objectives add placedSplitter minecraft.used:minecraft.white_bed
+scoreboard objectives add placedInserter minecraft.used:minecraft.lightning_rod
 
 scoreboard objectives setdisplay sidebar cooldown
 
 scoreboard players reset @a placedSplitter
+scoreboard players reset @a placedInserter
 scoreboard players set mod x 100
 
 # give
@@ -24,6 +26,8 @@ give @p lightning_rod[minecraft:custom_name='{"text":"Inserter","italic":false}'
 kill @e[tag=item]
 execute at @e[tag=splitter] run setblock ~ ~ ~ air
 kill @e[tag=splitter]
+execute at @e[tag=inserter] run setblock ~ ~ ~ air
+kill @e[tag=inserter]
 
 kill @e[type=item]
 

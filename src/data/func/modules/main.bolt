@@ -1,15 +1,17 @@
 function func:update:
     # items
     execute as @e[tag=item] at @s run function func:item/update
-    
-    execute as @e[tag=item] if score @s cooldown matches 1..:
-        say -1
-        scoreboard players remove @s cooldown 1
 
     # raycast
     execute as @e[scores={placedSplitter=1..}] at @s:
         function func:raycast/cast
         scoreboard players reset @s placedSplitter
+    execute as @e[scores={placedInserter=1..}] at @s:
+        function func:raycast/cast
+        scoreboard players reset @s placedInserter
 
     # splitter
     execute as @e[tag=splitter] at @s run function func:logistics/splitter/update
+
+    # inserter
+    execute as @e[tag=inserter] at @s run function func:logisitcs/inserter/update

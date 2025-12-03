@@ -1,2 +1,0 @@
-execute if score @e[tag=splitter, limit=1, sort=nearest] splitter matches 0 unless entity @s[tag=busy] positioned ^ ^ ^1.1 unless entity @e[tag=item, distance=..0.1] run function func:logistics/splitter/update/nested_execute_0
-execute if score @e[tag=splitter, limit=1, sort=nearest] splitter matches 1 unless entity @s[tag=busy] positioned ^1 ^ ^1.1 unless entity @e[tag=item, distance=..0.1] run function func:logistics/splitter/update/nested_execute_1

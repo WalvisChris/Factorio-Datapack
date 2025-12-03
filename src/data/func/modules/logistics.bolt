@@ -12,34 +12,61 @@ function func:logistics/splitter/align:
     if block ~ ~ ~ #beds[facing=west] run tp @s ~-.5 ~ ~ 180 0
 
 function func:logistics/splitter/update:
-    # right
-    execute positioned ^-.5 ^ ^-.2 if entity @e[tag=item,tag=!busy,distance=...5]:
-        execute as @e[tag=item,tag=!busy,distance=...5] at @s:
-            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 0 unless entity @s[tag=busy]:
-                positioned ^ ^ ^1.1 unless entity @e[tag=item,distance=...1]:
-                    tag @s add busy
-                    tp @s ^ ^ ^
-                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
-                    scoreboard players set @s cooldown 3
-            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
-                positioned ^1 ^ ^1.1 unless entity @e[tag=item,distance=...1]:
-                    tag @s add busy
-                    tp @s ^ ^ ^
-                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
-                    scoreboard players set @s cooldown 3
-    
     # left
-    execute positioned ^0.5 ^ ^-.2 if entity @e[tag=item,tag=!busy,distance=...5]:
-        execute as @e[tag=item,tag=!busy,distance=...5] at @s:
-            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 0 unless entity @s[tag=busy]:
-                positioned ^-1 ^ ^1.1 unless entity @e[tag=item,distance=...1]:
-                    tag @s add busy
-                    tp @s ^ ^ ^
-                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
-                    scoreboard players set @s cooldown 3
-            if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
-                positioned ^ ^ ^1.1 unless entity @e[tag=item,distance=...1]:
-                    tag @s add busy
-                    tp @s ^ ^ ^
-                    scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
-                    scoreboard players set @s cooldown 3
+    execute positioned ^0.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logisitcs/splitter/split_left
+    # right
+    execute positioned ^-.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logisitcs/splitter/split_right
+
+function func:logisitcs/splitter/split_left:
+    execute if score @s splitter matches 0 run return:
+        execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
+        scoreboard players set @s splitter 1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1
+    execute if score @s splitter matches 1 run return:
+        execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^-1 ^ ^1 if entity @e[tag=item,distance=...1] run return fail
+        scoreboard players set @s splitter 0
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^-1 ^ ^1
+
+function func:logisitcs/splitter/split_right:
+    execute if score @s splitter matches 0 run return:
+        execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
+        scoreboard players set @s splitter 1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1
+    execute if score @s splitter matches 1 run return:
+        execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^1 ^ ^1 if entity @e[tag=item,distance=...1] run return fail
+        scoreboard players set @s splitter 0
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^1 ^ ^1
+
+function func:logisitcs/inserter/spawn:
+    summon armor_stand ~ ~ ~ {Marker:0,Invisible:0,NoGravity:1,Tags:["inserter"]}
+    raw tellraw @a {"text":"> placed inserter","color":"gold"}
+    execute as @e[tag=inserter,limit=1,sort=nearest] at @s:
+        scoreboard players set @s cooldown 0
+        function func:logisitcs/inserter/align
+
+function func:logisitcs/inserter/align:
+    if block ~ ~ ~ lightning_rod[facing=north] run return run tp @s ~ ~ ~ 0 0
+    if block ~ ~ ~ lightning_rod[facing=south] run return run tp @s ~ ~ ~ 180 0
+    if block ~ ~ ~ lightning_rod[facing=east] run return run tp @s ~ ~ ~ 90 0
+    if block ~ ~ ~ lightning_rod[facing=west] run return run tp @s ~ ~ ~ 270 0
+    raw tellraw @a {"text":"invalid inserter!","color":"red"}
+    setblock ~ ~ ~ air
+    kill @s
+
+function func:logisitcs/inserter/update:
+    if entity @s[scores={cooldown=0}]:
+        # left
+        execute positioned ^0.25 ^ ^-.5 run particle flame
+        execute positioned ^0.25 ^ ^-.5 if entity @e[tag=item,distance=...3] run return run function func:logisitcs/inserter/insert
+        # right
+        execute positioned ^-.25 ^ ^-.5 run particle flame
+        execute positioned ^-.25 ^ ^-.5 if entity @e[tag=item,distance=...3] run return run function func:logisitcs/inserter/insert
+
+    # cooldown
+    scoreboard players remove @s[scores={cooldown=1..}] cooldown 1
+
+function func:logisitcs/inserter/insert:
+    say item detected
+    execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1.3 if entity @e[tag=item,distance=...1] run return fail
+    scoreboard players set @s cooldown 20
+    execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1.3
