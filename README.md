@@ -1,5 +1,10 @@
 # Factorio Datapack  
 
+# TODO  
+- fix splitter balance.  
+- fix busy tag.  
+- check balancer output availability.  
+
 # Links  
 [bolt](https://www.youtube.com/watch?v=IOS-OnqE4GY)  
 [raycasts](https://www.youtube.com/watch?v=qUO-iQ_wWEI)  

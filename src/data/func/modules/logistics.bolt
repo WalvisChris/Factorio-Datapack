@@ -20,11 +20,13 @@ function func:logistics/splitter/update:
                     tag @s add busy
                     tp @s ^ ^ ^
                     scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
+                    scoreboard players set @s cooldown 3
             if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
                 positioned ^1 ^ ^1.1 unless entity @e[tag=item,distance=...1]:
                     tag @s add busy
                     tp @s ^ ^ ^
                     scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
+                    scoreboard players set @s cooldown 3
     
     # left
     execute positioned ^0.5 ^ ^-.2 if entity @e[tag=item,tag=!busy,distance=...5]:
@@ -34,8 +36,10 @@ function func:logistics/splitter/update:
                     tag @s add busy
                     tp @s ^ ^ ^
                     scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 1
+                    scoreboard players set @s cooldown 3
             if score @e[tag=splitter,limit=1,sort=nearest] splitter matches 1 unless entity @s[tag=busy]:
                 positioned ^ ^ ^1.1 unless entity @e[tag=item,distance=...1]:
                     tag @s add busy
                     tp @s ^ ^ ^
                     scoreboard players set @e[tag=splitter,limit=1,sort=nearest] splitter 0
+                    scoreboard players set @s cooldown 3

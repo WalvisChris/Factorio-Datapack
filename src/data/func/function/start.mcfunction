@@ -3,10 +3,11 @@ scoreboard objectives add x dummy
 scoreboard objectives add z dummy
 scoreboard objectives add steps dummy
 scoreboard objectives add splitter dummy
+scoreboard objectives add cooldown dummy
 
 scoreboard objectives add placedSplitter minecraft.used:minecraft.white_bed
 
-scoreboard objectives setdisplay sidebar splitter
+scoreboard objectives setdisplay sidebar cooldown
 
 scoreboard players reset @a placedSplitter
 scoreboard players set mod x 100
