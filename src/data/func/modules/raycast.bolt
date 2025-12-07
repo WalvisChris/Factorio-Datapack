@@ -23,7 +23,7 @@ function func:raycast/move:
         tag @s add hit
         execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/drill/spawn
     
-    execute if block ~ ~ ~ furnace:
+    execute if block ~ ~ ~ blast_furnace:
         tag @s add hit
         execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/furnace/spawn
     
