@@ -14,7 +14,8 @@
 [if else](https://youtu.be/eiLuVOBVsSs?si=ly7xeaKTgLsZl4av)  
 
 # Custom Textures  
-## Belt Straight  
-![Belt Straight](factorio%20resource%20pack/assets/minecraft/textures/block/acacia_trapdoor.png)
+![1](factorio%20resource%20pack/assets/minecraft/textures/block/acacia_trapdoor.png) ![2](factorio%20resource%20pack/assets/minecraft/textures/block/jungle_trapdoor.png) ![3](factorio%20resource%20pack/assets/minecraft/textures/block/birch_trapdoor.png)  
+![4](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front.png) ![5](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_side.png) ![6](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_end.png)  
+![7](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/red.png) ![8](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/white.png)  
 
  
