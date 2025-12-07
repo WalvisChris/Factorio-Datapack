@@ -15,5 +15,5 @@
 
 # Custom Textures  
 ## Belt Straight  
-![1]("factorio resource pack/assets/minecraft/textures/block/acacia_trapdoor.png")
+![Belt Straight](factorio\ resource\ pack/assets/minecraft/textures/block/acacia_trapdoor.png)
  
