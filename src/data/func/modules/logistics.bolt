@@ -13,11 +13,11 @@ function func:logistics/splitter/align:
 
 function func:logistics/splitter/update:
     # left
-    execute positioned ^0.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logisitcs/splitter/split_left
+    execute positioned ^0.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logistics/splitter/split_left
     # right
-    execute positioned ^-.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logisitcs/splitter/split_right
+    execute positioned ^-.5 ^ ^-.1 if entity @e[tag=item,distance=...5] run function func:logistics/splitter/split_right
 
-function func:logisitcs/splitter/split_left:
+function func:logistics/splitter/split_left:
     execute if score @s splitter matches 0 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 1
@@ -27,7 +27,7 @@ function func:logisitcs/splitter/split_left:
         scoreboard players set @s splitter 0
         execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^-1 ^ ^1.1
 
-function func:logisitcs/splitter/split_right:
+function func:logistics/splitter/split_right:
     execute if score @s splitter matches 0 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 1
@@ -37,14 +37,14 @@ function func:logisitcs/splitter/split_right:
         scoreboard players set @s splitter 0
         execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^1 ^ ^1.1
 
-function func:logisitcs/inserter/spawn:
+function func:logistics/inserter/spawn:
     summon armor_stand ~ ~ ~ {Marker:1,Invisible:0,NoGravity:1,Tags:["inserter"],ShowArms:1,Pose:{LeftArm:[60.0f,0.0f,0.0f],RightArm:[60.0f,0.0f,0.0f]}}
     raw tellraw @a {"text":"> placed inserter","color":"gold"}
     execute as @e[tag=inserter,limit=1,sort=nearest] at @s:
         scoreboard players set @s cooldown 0
-        function func:logisitcs/inserter/align
+        function func:logistics/inserter/align
 
-function func:logisitcs/inserter/align:
+function func:logistics/inserter/align:
     if block ~ ~ ~ lightning_rod[facing=north] run return run tp @s ~ ~ ~ 0 0
     if block ~ ~ ~ lightning_rod[facing=south] run return run tp @s ~ ~ ~ 180 0
     if block ~ ~ ~ lightning_rod[facing=east] run return run tp @s ~ ~ ~ 90 0
@@ -53,21 +53,21 @@ function func:logisitcs/inserter/align:
     setblock ~ ~ ~ air
     kill @s
 
-function func:logisitcs/inserter/update:
+function func:logistics/inserter/update:
     if entity @s[scores={cooldown=0}]:
         
         # chest?
         if block ^ ^ ^-1 chest:
             execute store result score @s itemCount run data get block ^ ^ ^-1 Items[0].count
             if score @s itemCount matches 1..:
-                function func:logisitcs/inserter/spawn_item
+                function func:logistics/inserter/spawn_item
                 scoreboard players remove @s itemCount 1
                 execute store result block ^ ^ ^-1 Items[0].count int 1 run scoreboard players get @s itemCount
             if score @s itemCount matches 0:
                 item replace block ^ ^ ^-1 container.0 with air
 
         # belt?
-        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logisitcs/inserter/move_item
+        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logistics/inserter/move_item
 
     # animation
     if score @s cooldown matches 15..20:
@@ -77,7 +77,7 @@ function func:logisitcs/inserter/update:
     # cooldown
     scoreboard players remove @s[scores={cooldown=1..}] cooldown 1
 
-function func:logisitcs/inserter/spawn_item:
+function func:logistics/inserter/spawn_item:
     scoreboard players set @s cooldown 20
     execute at @p run playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
@@ -87,7 +87,7 @@ function func:logisitcs/inserter/spawn_item:
         item replace entity @e[tag=item,limit=1,sort=nearest,nbt={ArmorItems:[{},{},{},{}]}] armor.head from block ^ ^ ^-1 container.0
         data modify entity @e[tag=item,limit=1,sort=nearest] ArmorItems[3].count set value 1
 
-function func:logisitcs/inserter/move_item:  
+function func:logistics/inserter/move_item:  
     # belt?
     if block ^ ^ ^1 #trapdoors:
         scoreboard players set @s cooldown 20
@@ -115,3 +115,35 @@ function func:logisitcs/inserter/move_item:
 
             item replace block ^ ^ ^1 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
             execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
+
+function func:logistics/drill/spawn:
+    summon armor_stand ~ ~ ~ {Marker:1,Invisible:0,NoGravity:1,Tags:["drill"]}
+    raw tellraw @a {"text":"> placed drill","color":"gold"}
+    execute as @e[tag=drill,limit=1,sort=nearest] at @s:
+        scoreboard players set @s cooldown 40
+        function func:logistics/drill/align
+
+function func:logistics/drill/align:
+    if block ~ ~ ~ beehive[facing=north] run return run tp @s ~ ~ ~ 180 0
+    if block ~ ~ ~ beehive[facing=south] run return run tp @s ~ ~ ~ 0 0
+    if block ~ ~ ~ beehive[facing=east] run return run tp @s ~ ~ ~ 270 0
+    if block ~ ~ ~ beehive[facing=west] run return run tp @s ~ ~ ~ 90 0
+    raw tellraw @a {"text":"invalid drill!","color":"red"}
+    setblock ~ ~ ~ air
+    kill @s
+
+function func:logistics/drill/update:
+    
+    if block ~ ~-1 ~ #func:ores run function func:logistics/drill/mine
+    
+function func:logistics/drill/mine:
+    if block ~ ~-1 ~ coal_ore run say iron
+    if block ~ ~-1 ~ copper_ore run say copper
+    if block ~ ~-1 ~ iron_ore run say stone
+    if block ~ ~-1 ~ diamond_ore run say iron
+
+    if score @s cooldown matches 0:
+        summon armor_stand ^ ^ ^1 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"raw_iron"}],Tags:["item"]}
+        scoreboard players set @s cooldown 40
+
+    scoreboard players remove @s[scores={cooldown=1..}] cooldown 1

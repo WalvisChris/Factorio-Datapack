@@ -17,7 +17,11 @@ function func:raycast/move:
     
     execute if block ~ ~ ~ lightning_rod:
         tag @s add hit
-        execute align xyz positioned ~.5 ~ ~.5 run function func:logisitcs/inserter/spawn
+        execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/inserter/spawn
+
+    execute if block ~ ~ ~ beehive:
+        tag @s add hit
+        execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/drill/spawn
     
     # iterate
     scoreboard players remove @s steps 1

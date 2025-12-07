@@ -9,9 +9,15 @@ function func:update:
     execute as @e[scores={placedInserter=1..}] at @s:
         function func:raycast/cast
         scoreboard players reset @s placedInserter
+    execute as @e[scores={placedDrill=1..}] at @s:
+        function func:raycast/cast
+        scoreboard players reset @s placedDrill
 
     # splitter
     execute as @e[tag=splitter] at @s run function func:logistics/splitter/update
 
     # inserter
-    execute as @e[tag=inserter] at @s run function func:logisitcs/inserter/update
+    execute as @e[tag=inserter] at @s run function func:logistics/inserter/update
+
+    # drill
+    execute as @e[tag=drill] at @s run function func:logistics/drill/update
