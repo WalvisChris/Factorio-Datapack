@@ -2,6 +2,8 @@ execute as @e[tag=item] at @s run function func:item/update
 execute as @e[scores={placedSplitter=1..}] at @s run function func:update/nested_execute_0
 execute as @e[scores={placedInserter=1..}] at @s run function func:update/nested_execute_1
 execute as @e[scores={placedDrill=1..}] at @s run function func:update/nested_execute_2
+execute as @e[scores={placedFurnace=1..}] at @s run function func:update/nested_execute_3
 execute as @e[tag=splitter] at @s run function func:logistics/splitter/update
 execute as @e[tag=inserter] at @s run function func:logistics/inserter/update
 execute as @e[tag=drill] at @s run function func:logistics/drill/update
+execute as @e[tag=furnace] at @s run function func:logistics/furnace/update

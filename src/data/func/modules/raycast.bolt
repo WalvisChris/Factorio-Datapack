@@ -23,6 +23,10 @@ function func:raycast/move:
         tag @s add hit
         execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/drill/spawn
     
+    execute if block ~ ~ ~ furnace:
+        tag @s add hit
+        execute align xyz positioned ~.5 ~ ~.5 run function func:logistics/furnace/spawn
+    
     # iterate
     scoreboard players remove @s steps 1
     execute as @s[tag=!hit,scores={steps=1..}] at @s run function func:raycast/move

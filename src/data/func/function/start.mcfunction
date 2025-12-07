@@ -9,8 +9,9 @@ scoreboard objectives add itemCount dummy
 scoreboard objectives add placedSplitter minecraft.used:minecraft.white_bed
 scoreboard objectives add placedInserter minecraft.used:minecraft.lightning_rod
 scoreboard objectives add placedDrill minecraft.used:minecraft.beehive
+scoreboard objectives add placedFurnace minecraft.used:minecraft.furnace
 
-scoreboard objectives setdisplay sidebar cooldown
+scoreboard objectives setdisplay sidebar placedFurnace
 
 scoreboard players reset @a placedSplitter
 scoreboard players reset @a placedInserter
@@ -26,7 +27,7 @@ give @p white_bed[minecraft:custom_name='{"text":"Splitter","italic":false}']
 give @p lightning_rod[minecraft:custom_name='{"text":"Inserter","italic":false}']
 give @p beehive[minecraft:custom_name='{"text":"Drill","italic":false}']
 give @p chest[minecraft:custom_name='{"text":"Wooden Box","italic":false}']
-give @p iron_ingot[minecraft:custom_name='{"text":"Iron","italic":false}']
+give @p furnace
 
 # kill
 kill @e[tag=item]
@@ -36,6 +37,8 @@ execute at @e[tag=inserter] run setblock ~ ~ ~ air
 kill @e[tag=inserter]
 execute at @e[tag=drill] run setblock ~ ~ ~ air
 kill @e[tag=drill]
+execute at @e[tag=furnace] run fill ~-1 ~ ~-1 ~1 ~ ~1 air replace furnace
+kill @e[tag=furnace]
 
 kill @e[type=item]
 

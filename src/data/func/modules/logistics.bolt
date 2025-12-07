@@ -153,3 +153,23 @@ function func:logistics/drill/mine:
 
     # cooldown
     scoreboard players remove @s[scores={cooldown=1..}] cooldown 1
+
+function func:logistics/furnace/spawn:
+    summon armor_stand ~ ~ ~ {Marker:1,Invisible:0,NoGravity:1,Tags:["furnace"]}
+    raw tellraw @a {"text":"> placed furnace","color":"gold"}
+    execute as @e[tag=furnace,limit=1,sort=nearest] at @s:
+        scoreboard players set @s cooldown 40
+        function func:logistics/furnace/align
+
+function func:logistics/furnace/align:
+    if block ~ ~ ~ furnace[facing=north] run return run tp @s ~ ~ ~ 180 0
+    if block ~ ~ ~ furnace[facing=south] run return run tp @s ~ ~ ~ 0 0
+    if block ~ ~ ~ furnace[facing=east] run return run tp @s ~ ~ ~ 270 0
+    if block ~ ~ ~ furnace[facing=west] run return run tp @s ~ ~ ~ 90 0
+    raw tellraw @a {"text":"invalid furnace!","color":"red"}
+    setblock ~ ~ ~ air
+    kill @s
+    # TODO fill 2x2 area by furnace
+
+function func:logistics/furnace/update:
+    say furnace update
