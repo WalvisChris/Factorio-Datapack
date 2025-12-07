@@ -1,4 +1,3 @@
-execute positioned ^0.25 ^ ^-0.5 run particle flame
-execute positioned ^0.25 ^ ^-0.5 if entity @e[tag=item, distance=..0.3] run return run function func:logisitcs/inserter/insert
-execute positioned ^-0.25 ^ ^-0.5 run particle flame
-execute positioned ^-0.25 ^ ^-0.5 if entity @e[tag=item, distance=..0.3] run return run function func:logisitcs/inserter/insert
+function func:logisitcs/inserter/spawn_item
+scoreboard players remove @s itemCount 1
+execute store result block ^ ^ ^-1 Items[0].count int 1 run scoreboard players get @s itemCount

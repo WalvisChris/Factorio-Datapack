@@ -21,24 +21,24 @@ function func:logisitcs/splitter/split_left:
     execute if score @s splitter matches 0 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 1
-        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1.1
     execute if score @s splitter matches 1 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^-1 ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 0
-        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^-1 ^ ^1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^-1 ^ ^1.1
 
 function func:logisitcs/splitter/split_right:
     execute if score @s splitter matches 0 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 1
-        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1.1
     execute if score @s splitter matches 1 run return:
         execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^1 ^ ^1 if entity @e[tag=item,distance=...1] run return fail
         scoreboard players set @s splitter 0
-        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^1 ^ ^1
+        execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^1 ^ ^1.1
 
 function func:logisitcs/inserter/spawn:
-    summon armor_stand ~ ~ ~ {Marker:0,Invisible:0,NoGravity:1,Tags:["inserter"]}
+    summon armor_stand ~ ~ ~ {Marker:1,Invisible:0,NoGravity:1,Tags:["inserter"],ShowArms:1,Pose:{LeftArm:[60.0f,0.0f,0.0f],RightArm:[60.0f,0.0f,0.0f]}}
     raw tellraw @a {"text":"> placed inserter","color":"gold"}
     execute as @e[tag=inserter,limit=1,sort=nearest] at @s:
         scoreboard players set @s cooldown 0
@@ -55,18 +55,58 @@ function func:logisitcs/inserter/align:
 
 function func:logisitcs/inserter/update:
     if entity @s[scores={cooldown=0}]:
-        # left
-        execute positioned ^0.25 ^ ^-.5 run particle flame
-        execute positioned ^0.25 ^ ^-.5 if entity @e[tag=item,distance=...3] run return run function func:logisitcs/inserter/insert
-        # right
-        execute positioned ^-.25 ^ ^-.5 run particle flame
-        execute positioned ^-.25 ^ ^-.5 if entity @e[tag=item,distance=...3] run return run function func:logisitcs/inserter/insert
+        
+        # chest?
+        if block ^ ^ ^-1 chest:
+            execute store result score @s itemCount run data get block ^ ^ ^-1 Items[0].count
+            if score @s itemCount matches 1..:
+                function func:logisitcs/inserter/spawn_item
+                scoreboard players remove @s itemCount 1
+                execute store result block ^ ^ ^-1 Items[0].count int 1 run scoreboard players get @s itemCount
+            if score @s itemCount matches 0:
+                item replace block ^ ^ ^-1 container.0 with air
+
+        # belt?
+        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logisitcs/inserter/move_item
+
+    # animation
+    if score @s cooldown matches 15..20:
+        execute store result entity @s Pose.LeftArm[0] float 330 run scoreboard players get @s cooldown
+        execute store result entity @s Pose.RightArm[0] float 330 run scoreboard players get @s cooldown
 
     # cooldown
     scoreboard players remove @s[scores={cooldown=1..}] cooldown 1
 
-function func:logisitcs/inserter/insert:
-    say item detected
-    execute as @e[tag=item,distance=..5,limit=1,sort=nearest] at @s positioned ^ ^ ^1.3 if entity @e[tag=item,distance=...1] run return fail
+function func:logisitcs/inserter/spawn_item:
     scoreboard players set @s cooldown 20
-    execute as @e[tag=item,distance=...5,limit=1,sort=nearest] at @s run tp @s ^ ^ ^1.3
+    execute at @p run playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+
+    summon armor_stand ^-.25 ^.1 ^.6 {NoGravity:1,Small:1,Marker:1,Tags:["item"]}
+    item replace entity @e[tag=item,limit=1,sort=nearest,nbt={ArmorItems:[{},{},{},{}]}] armor.head from block ^ ^ ^-1 container.0
+
+function func:logisitcs/inserter/move_item:  
+    # belt?
+    if block ^ ^ ^1 #trapdoors:
+        scoreboard players set @s cooldown 20
+        playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+
+        execute positioned ^-.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^ ^.1 ^1
+        execute positioned ^0.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^-.5 ^.1 ^1
+
+    # chest?
+    if block ^ ^ ^1 chest:
+        execute store result score @s itemCount run data get block ^ ^ ^1 Items[0].count
+        if score @s itemCount matches 1..63:
+            scoreboard players set @s cooldown 20
+            playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+            
+            scoreboard players add @s itemCount 1
+            execute store result block ^ ^ ^1 Items[0].count int 1 run scoreboard players get @s itemCount
+            execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
+
+        if score @s itemCount matches 0:
+            scoreboard players set @s cooldown 20
+            playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+
+            item replace block 1 0 3 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
+            execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
