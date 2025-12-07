@@ -137,13 +137,19 @@ function func:logistics/drill/update:
     if block ~ ~-1 ~ #func:ores run function func:logistics/drill/mine
     
 function func:logistics/drill/mine:
-    if block ~ ~-1 ~ coal_ore run say iron
-    if block ~ ~-1 ~ copper_ore run say copper
-    if block ~ ~-1 ~ iron_ore run say stone
-    if block ~ ~-1 ~ diamond_ore run say iron
-
     if score @s cooldown matches 0:
-        summon armor_stand ^ ^ ^1 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"raw_iron"}],Tags:["item"]}
-        scoreboard players set @s cooldown 40
+        if block ~ ~-1 ~ coal_ore:
+            summon armor_stand ^ ^ ^.6 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"coal"}],Tags:["item"]}
+            scoreboard players set @s cooldown 40
+        if block ~ ~-1 ~ copper_ore:
+            summon armor_stand ^ ^ ^.6 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"raw_copper"}],Tags:["item"]}
+            scoreboard players set @s cooldown 40
+        if block ~ ~-1 ~ iron_ore:
+            summon armor_stand ^ ^ ^.6 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"clay_ball"}],Tags:["item"]}
+            scoreboard players set @s cooldown 40
+        if block ~ ~-1 ~ diamond_ore:
+            summon armor_stand ^ ^ ^.6 {NoGravity:1,Small:1,Marker:1,ArmorItems:[{},{},{},{id:"raw_iron"}],Tags:["item"]}
+            scoreboard players set @s cooldown 40
 
+    # cooldown
     scoreboard players remove @s[scores={cooldown=1..}] cooldown 1
