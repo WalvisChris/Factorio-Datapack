@@ -82,7 +82,10 @@ function func:logisitcs/inserter/spawn_item:
     execute at @p run playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
     summon armor_stand ^-.25 ^.1 ^.6 {NoGravity:1,Small:1,Marker:1,Tags:["item"]}
-    item replace entity @e[tag=item,limit=1,sort=nearest,nbt={ArmorItems:[{},{},{},{}]}] armor.head from block ^ ^ ^-1 container.0
+    
+    execute as @e[tag=item] unless items entity @s armor.head *[count=1]:
+        item replace entity @e[tag=item,limit=1,sort=nearest,nbt={ArmorItems:[{},{},{},{}]}] armor.head from block ^ ^ ^-1 container.0
+        data modify entity @e[tag=item,limit=1,sort=nearest] ArmorItems[3].count set value 1
 
 function func:logisitcs/inserter/move_item:  
     # belt?
@@ -97,16 +100,18 @@ function func:logisitcs/inserter/move_item:
     if block ^ ^ ^1 chest:
         execute store result score @s itemCount run data get block ^ ^ ^1 Items[0].count
         if score @s itemCount matches 1..63:
+            
             scoreboard players set @s cooldown 20
             playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
-            
+
             scoreboard players add @s itemCount 1
             execute store result block ^ ^ ^1 Items[0].count int 1 run scoreboard players get @s itemCount
             execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
 
         if score @s itemCount matches 0:
+            
             scoreboard players set @s cooldown 20
             playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
-            item replace block 1 0 3 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
+            item replace block ^ ^ ^1 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
             execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
