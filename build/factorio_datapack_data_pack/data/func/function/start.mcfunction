@@ -29,7 +29,7 @@ execute at @e[tag=inserter] run setblock ~ ~ ~ air
 kill @e[tag=inserter]
 execute at @e[tag=drill] run setblock ~ ~ ~ air
 kill @e[tag=drill]
-execute at @e[tag=furnace] run fill ~-1 ~ ~-1 ~1 ~ ~1 air replace blast_furnace
+execute at @e[tag=furnace] run fill ~-1 ~ ~-1 ~1 ~ ~1 air replace #func:furnace
 kill @e[tag=furnace]
 kill @e[type=item]
 say onLoad

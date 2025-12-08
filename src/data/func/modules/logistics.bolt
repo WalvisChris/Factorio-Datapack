@@ -56,7 +56,7 @@ function func:logistics/inserter/align:
 function func:logistics/inserter/update:
     if entity @s[scores={cooldown=0}]:
         
-        # chest?
+        # from chest?
         if block ^ ^ ^-1 chest:
             execute store result score @s itemCount run data get block ^ ^ ^-1 Items[0].count
             if score @s itemCount matches 1..:
@@ -66,7 +66,7 @@ function func:logistics/inserter/update:
             if score @s itemCount matches 0:
                 item replace block ^ ^ ^-1 container.0 with air
 
-        # belt?
+        # from belt?
         execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logistics/inserter/move_item
 
     # animation
@@ -88,33 +88,45 @@ function func:logistics/inserter/spawn_item:
         data modify entity @e[tag=item,limit=1,sort=nearest] ArmorItems[3].count set value 1
 
 function func:logistics/inserter/move_item:  
-    # belt?
-    if block ^ ^ ^1 #trapdoors:
+    # to belt?
+    if block ^ ^ ^1 #trapdoors run return run function func:logistics/move2belt
+
+    # to furnace?
+    execute positioned ^ ^ ^1.5 if entity @e[tag=furnace,distance=...6] at @s run return run function func:logistics/inserter/move2furnace
+
+    # to chest?
+    if block ^ ^ ^1 chest run return run function func:logistics/inserter/move2chest
+
+function func:logistics/inserter/move2belt:
+    say move2belt
+    scoreboard players set @s cooldown 20
+    playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+
+    execute positioned ^-.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^ ^.1 ^1
+    execute positioned ^0.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^-.5 ^.1 ^1
+
+function func:logistics/inserter/move2furnace:
+    say move2furnace
+
+function func:logistics/inserter/move2chest:
+    say move2chest
+    execute store result score @s itemCount run data get block ^ ^ ^1 Items[0].count
+    if score @s itemCount matches 1..63:
+        
         scoreboard players set @s cooldown 20
         playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
-        execute positioned ^-.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^ ^.1 ^1
-        execute positioned ^0.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^-.5 ^.1 ^1
+        scoreboard players add @s itemCount 1
+        execute store result block ^ ^ ^1 Items[0].count int 1 run scoreboard players get @s itemCount
+        execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
 
-    # chest?
-    if block ^ ^ ^1 chest:
-        execute store result score @s itemCount run data get block ^ ^ ^1 Items[0].count
-        if score @s itemCount matches 1..63:
-            
-            scoreboard players set @s cooldown 20
-            playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
+    if score @s itemCount matches 0:
+        
+        scoreboard players set @s cooldown 20
+        playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
-            scoreboard players add @s itemCount 1
-            execute store result block ^ ^ ^1 Items[0].count int 1 run scoreboard players get @s itemCount
-            execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
-
-        if score @s itemCount matches 0:
-            
-            scoreboard players set @s cooldown 20
-            playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
-
-            item replace block ^ ^ ^1 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
-            execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
+        item replace block ^ ^ ^1 container.0 from entity @e[tag=item,limit=1,sort=nearest] armor.head
+        execute positioned ^ ^ ^-.4 run kill @e[tag=item,limit=1,sort=nearest]
 
 function func:logistics/drill/spawn:
     summon armor_stand ~ ~ ~ {Marker:1,Invisible:0,NoGravity:1,Tags:["drill"]}
@@ -124,10 +136,10 @@ function func:logistics/drill/spawn:
         function func:logistics/drill/align
 
 function func:logistics/drill/align:
-    if block ~ ~ ~ beehive[facing=north] run return run tp @s ~ ~ ~ 180 0
-    if block ~ ~ ~ beehive[facing=south] run return run tp @s ~ ~ ~ 0 0
-    if block ~ ~ ~ beehive[facing=east] run return run tp @s ~ ~ ~ 270 0
-    if block ~ ~ ~ beehive[facing=west] run return run tp @s ~ ~ ~ 90 0
+    if block ~ ~ ~ beehive[facing=north] run return run data modify entity @s Rotation[0] set value 180.0f
+    if block ~ ~ ~ beehive[facing=south] run return run data modify entity @s Rotation[0] set value 0.0f
+    if block ~ ~ ~ beehive[facing=east] run return run data modify entity @s Rotation[0] set value 270.0f
+    if block ~ ~ ~ beehive[facing=west] run return run data modify entity @s Rotation[0] set value 90.0f
     raw tellraw @a {"text":"invalid drill!","color":"red"}
     setblock ~ ~ ~ air
     kill @s
@@ -162,14 +174,32 @@ function func:logistics/furnace/spawn:
         function func:logistics/furnace/align
 
 function func:logistics/furnace/align:
-    if block ~ ~ ~ blast_furnace[facing=north] run return run tp @s ~ ~ ~ 180 0
-    if block ~ ~ ~ blast_furnace[facing=south] run return run tp @s ~ ~ ~ 0 0
-    if block ~ ~ ~ blast_furnace[facing=east] run return run tp @s ~ ~ ~ 270 0
-    if block ~ ~ ~ blast_furnace[facing=west] run return run tp @s ~ ~ ~ 90 0
+    if block ~ ~ ~ blast_furnace[facing=north] run return:
+        execute if block ~ ~ ~1 air run setblock ~ ~ ~1 chest[facing=north]
+        execute if block ~1 ~ ~ air run setblock ~1 ~ ~ chest[facing=north]
+        execute if block ~1 ~ ~1 air run setblock ~1 ~ ~1 blast_furnace[facing=north]
+        tp @s ~0.5 ~ ~0.5
+        data modify entity @s Rotation[0] set value 180.0f
+    if block ~ ~ ~ blast_furnace[facing=south] run return:
+        execute if block ~ ~ ~-1 air run setblock ~ ~ ~-1 chest[facing=south]
+        execute if block ~-1 ~ ~ air run setblock ~-1 ~ ~ chest[facing=south]
+        execute if block ~-1 ~ ~-1 air run setblock ~-1 ~ ~-1 blast_furnace[facing=south] 
+        tp @s ~-.5 ~ ~-.5
+        data modify entity @s Rotation[0] set value 0.0f
+    if block ~ ~ ~ blast_furnace[facing=east] run return:
+        execute if block ~ ~ ~1 air run setblock ~ ~ ~1 chest[facing=east]
+        execute if block ~-1 ~ ~ air run setblock ~-1 ~ ~ chest[facing=east]
+        execute if block ~-1 ~ ~1 air run setblock ~-1 ~ ~1 blast_furnace[facing=east]
+        tp @s ~-.5 ~ ~0.5
+        data modify entity @s Rotation[0] set value 270.0f
+    if block ~ ~ ~ blast_furnace[facing=west] run return:
+        execute if block ~ ~ ~-1 air run setblock ~ ~ ~-1 chest[facing=west]
+        execute if block ~1 ~ ~ air run setblock ~1 ~ ~ chest[facing=west]
+        execute if block ~1 ~ ~-1 air run setblock ~1 ~ ~-1 blast_furnace[facing=west] 
+        tp @s ~0.5 ~ ~-.5
+        data modify entity @s Rotation[0] set value 90.0f
     raw tellraw @a {"text":"invalid furnace!","color":"red"}
     setblock ~ ~ ~ air
     kill @s
-    # TODO fill 2x2 area by furnace
 
-function func:logistics/furnace/update:
-    say furnace update
+#function func:logistics/furnace/update:
