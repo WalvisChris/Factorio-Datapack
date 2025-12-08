@@ -15,5 +15,5 @@
 
 # Custom Textures  
 **Belt:** ![1](factorio%20resource%20pack/assets/minecraft/textures/block/acacia_trapdoor.png) ![2](factorio%20resource%20pack/assets/minecraft/textures/block/jungle_trapdoor.png) ![3](factorio%20resource%20pack/assets/minecraft/textures/block/birch_trapdoor.png)  
-**Drill:** ![4](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front.png) ![5](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_side.png) ![6](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_end.png)  
-**Splitter:** ![7](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/red.png) ![8](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/white.png)   
+**Drill:** ![4](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front.png) ![5](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front_honey.png) ![6](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_side.png) ![7](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_end.png)  
+**Splitter:** ![8](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/red.png) ![9](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/white.png)   
