@@ -14,6 +14,16 @@
 [if else](https://youtu.be/eiLuVOBVsSs?si=ly7xeaKTgLsZl4av)  
 
 # Custom Textures  
-**Belt:** ![1](factorio%20resource%20pack/assets/minecraft/textures/block/acacia_trapdoor.png) ![2](factorio%20resource%20pack/assets/minecraft/textures/block/jungle_trapdoor.png) ![3](factorio%20resource%20pack/assets/minecraft/textures/block/birch_trapdoor.png)  
-**Drill:** ![4](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front.png) ![5](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front_honey.png) ![6](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_side.png) ![7](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_end.png)  
-**Splitter:** ![8](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/red.png) ![9](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/white.png)   
+**Belt:** ![belt_front](factorio%20resource%20pack/assets/minecraft/textures/block/acacia_trapdoor.png) ![belt_left](factorio%20resource%20pack/assets/minecraft/textures/block/jungle_trapdoor.png) ![belft_right](factorio%20resource%20pack/assets/minecraft/textures/block/birch_trapdoor.png)  
+**Drill:** ![drill_front](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front.png) ![drill_front_full](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_front_honey.png) ![drill_side](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_side.png) ![drill_top](factorio%20resource%20pack/assets/minecraft/textures/block/beehive_end.png)  
+**Splitter:** ![splitter](factorio%20resource%20pack/assets/minecraft/textures/entity/bed/white.png)   
+
+# Videos
+## Belts
+![belts](gitmedia/belts.gif)  
+## Splitter  
+![splitter](gitmedia/splitter.gif)  
+## Drill  
+![drill](gitmedia/drill.gif)  
+## Inserter  
+![inserter](gitmedia/inserter.gif)  
