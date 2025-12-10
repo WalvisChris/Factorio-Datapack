@@ -67,7 +67,8 @@ function func:logistics/inserter/update:
                 item replace block ^ ^ ^-1 container.0 with air
 
         # from belt?
-        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logistics/inserter/move_item
+        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors at @s positioned ^ ^ ^-.1 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run say from belt
+        execute positioned ^ ^ ^-1 if block ^ ^ ^ #trapdoors at @s positioned ^ ^ ^-.1 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] at @s run function func:logistics/inserter/move_item
 
     # animation
     if score @s cooldown matches 15..20:
@@ -89,7 +90,8 @@ function func:logistics/inserter/spawn_item:
 
 function func:logistics/inserter/move_item:  
     # to belt?
-    if block ^ ^ ^1 #trapdoors run return run function func:logistics/move2belt
+    if block ^ ^ ^1 #trapdoors run say to belt
+    if block ^ ^ ^1 #trapdoors run return run function func:logistics/inserter/move2belt
 
     # to furnace?
     execute positioned ^ ^ ^1.5 if entity @e[tag=furnace,distance=...6] at @s run return run function func:logistics/inserter/move2furnace
@@ -102,8 +104,8 @@ function func:logistics/inserter/move2belt:
     scoreboard players set @s cooldown 20
     playsound minecraft:entity.breeze.inhale master @p ~ ~ ~ 1 2
 
-    execute positioned ^-.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^ ^.1 ^1
-    execute positioned ^0.25 ^ ^-.4 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^-.5 ^.1 ^1
+    execute positioned ^-.25 ^ ^-.1 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^ ^.1 ^1
+    execute positioned ^0.25 ^ ^-.1 if entity @e[tag=item,limit=1,sort=nearest,distance=...5] run return run tp @e[tag=item,limit=1,sort=nearest,distance=...5] ^-.5 ^.1 ^1
 
 function func:logistics/inserter/move2furnace:
     say move2furnace
